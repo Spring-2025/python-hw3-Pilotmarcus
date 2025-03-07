@@ -1,16 +1,18 @@
+#GetReturns
 import yfinance as yf
 import pandas as pd
 import numpy as np
 
-def get_stock_data(symbol, start=None, end=None):
-  
-    data = yf.download(symbol, start=start, end=end)
-    return data
+def YahooData2returns(symbol):
+  data=yf.download(symbol,auto_adjust=False)
+  prices=data['Adj Close'].values
+  returns=get_returns(prices)
 
-def YahooData2returns(YahooData):
-   
-    prices = YahooData['Adj Close']
-    pricevec = prices.values
-    returns = (pricevec[1:] / pricevec[:-1]) - 1
-    return returns
+  return returns
+
+def get_returns(pricevec):
+  n=len(pricevec)
+  ratiovec=pricevec[1:n]/pricevec[:n-1]
+  returns=ratiovec-1
+  return returns
 
